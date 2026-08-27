@@ -36,18 +36,19 @@ input{width:130px;padding:10px;margin:5px;font-size:18px;text-align:center}
 
 <div class="section">
 <h3>Turn</h3>
-<input type="number" id="turnRight" value="0" min="0" placeholder="Right turn (degrees)"><br>
-<input type="number" id="turnLeft" value="0" min="0" placeholder="Left turn (degrees)"><br>
+<input type="text" id="turnRight" value="" min="0" placeholder="Right turn (degrees)">
+<input type="text" id="turnLeft" value="" min="0" placeholder="Left turn (degrees)"><br>
 <button class="action" onclick="turnRobot()">TURN</button>
 </div>
 
 <div class="section">
 <h3>X / Y Coordinate</h3>
-<input type="number" id="xForward" value="0" min="0" placeholder="X Forward (mm)"><br>
-<input type="number" id="xBackward" value="0" min="0" placeholder="X Backward (mm)"><br>
-<input type="number" id="yRight" value="0" min="0" placeholder="Y Right (mm)"><br>
-<input type="number" id="yLeft" value="0" min="0" placeholder="Y Left (mm)"><br>
-<button class="action" onclick="moveXY()">MOVE X / Y</button>
+<input type="text" id="xForward" value="" min="0" placeholder="X Forward (mm)">
+<input type="text" id="xBackward" value="" min="0" placeholder="X Backward (mm)"><br>
+<input type="text" id="yRight" value="" min="0" placeholder="Y Right (mm)">
+<input type="text" id="yLeft" value="" min="0" placeholder="Y Left (mm)"><br>
+<input type="text" id="zAngle" value="" placeholder="Final Angle (degrees)"><br>
+<button class="action" onclick="moveXY()">MOVE X / Y / Z</button>
 </div>
 
 <div><button class="action" onclick="stopRobot()">STOP ROBOT</button></div>
@@ -71,13 +72,14 @@ function moveXY(){
   let xBackward=parseFloat(document.getElementById('xBackward').value)||0;
   let yRight=parseFloat(document.getElementById('yRight').value)||0;
   let yLeft=parseFloat(document.getElementById('yLeft').value)||0;
+  let z=parseFloat(document.getElementById('zAngle').value)||0;
   if(xForward>0&&xBackward>0){alert('Enter either X Forward or X Backward, not both.');return}
   if(yRight>0&&yLeft>0){alert('Enter either Y Right or Y Left, not both.');return}
   let x=0,y=0;
   if(xForward>0)x=xForward;else if(xBackward>0)x=-xBackward;
   if(yRight>0)y=yRight;else if(yLeft>0)y=-yLeft;
   if(x==0&&y==0){alert('Enter a distance in at least one X/Y direction.');return}
-  fetch('/xy?x='+x+'&y='+y);
+  fetch('/xy?x='+x+'&y='+y+'&z='+z);
 }
 
 function stopRobot(){fetch('/stop')}
@@ -134,6 +136,7 @@ void handleTurn() {
 void handleXY() {
   float x = server.arg("x").toFloat();
   float y = server.arg("y").toFloat();
+  requestedZ = server.arg("z").toFloat();
   fwd = bwd = left = right = false;
   startXY(x, y);
   server.send(200, "text/plain", "xy started");
@@ -159,6 +162,9 @@ void handleStatus() {
   else if (autoState == AUTO_MOVE_X) autoName = "X";
   else if (autoState == AUTO_TURN_Y) autoName = "TURN Y";
   else if (autoState == AUTO_MOVE_Y) autoName = "Y";
+  else if (autoState == AUTO_TURN_TO_GOAL) autoName = "TURN TO GOAL";
+  else if (autoState == AUTO_MOVE_GOAL) autoName = "MOVE TO GOAL";
+  else if (autoState == AUTO_FINAL_TURN) autoName = "FINAL TURN";
   else autoName = "DONE";
 
   String json = "{";

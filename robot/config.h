@@ -18,8 +18,7 @@ extern const char* password;
 #define PWM_RES 8
 
 #define WHEEL_CIRCUMFERENCE_MM 100.53f
-// #define WHEEL_BASE_MM 100.23f
-#define WHEEL_BASE_MM 132.50f
+#define WHEEL_BASE_MM 130.50f
 #define LEFT_TICKS_PER_REV 2020.0f
 #define RIGHT_TICKS_PER_REV 2000.0f
 

@@ -34,18 +34,22 @@ AutoState autoState = AUTO_IDLE;
 
 float requestedX = 0;
 float requestedY = 0;
-float remainingX = 0;
-float remainingY = 0;
-float targetTurnAngle = 0;
-float autoStartHeading = 0;
-float autoTargetHeading = 0;
+float requestedZ = 0;
+
+float goalDistance = 0;
+float goalTravelAngle = 0;
+float goalTargetHeading = 0;
+
+float finalTargetHeading = 0;
 
 long autoStartLeftTicks = 0;
 long autoStartRightTicks = 0;
+float autoStartHeading = 0;
+
+float autoTargetHeading = 0;
+float targetTurnAngle = 0;
 
 int autoMoveDirection = 1;
-bool yTurnRight = false;
-bool returnToOriginalHeading = false;
 
 float pidIntegral = 0;
 float pidLastError = 0;

@@ -44,7 +44,7 @@ void applyStraightPID(int &speedL, int &speedR) {
   float error = leftRevolutions - rightRevolutions;
 
   pidIntegral += error;
-  pidIntegral = constrain(pidIntegral, -100.53f, 100.53f);
+  pidIntegral = constrain(pidIntegral, -100.0f, 100.0f);
 
   float derivative = error - pidLastError;
 
