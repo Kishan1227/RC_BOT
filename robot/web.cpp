@@ -57,6 +57,42 @@ input{width:130px;padding:10px;margin:5px;font-size:18px;text-align:center}
 <script>
 function send(dir,state){fetch('/cmd?d='+dir+'&s='+state)}
 
+let manualTimer = null;
+let currentManualCommand = null;
+
+function startManual(dir) {
+
+  // Stop any previous repeating command
+  if (manualTimer !== null) {
+    clearInterval(manualTimer);
+  }
+
+  currentManualCommand = dir;
+
+  // Send immediately
+  send(dir, 1);
+
+  // Keep command alive while button is held
+  manualTimer = setInterval(() => {
+    send(dir, 1);
+  }, 300);
+}
+
+function stopManual() {
+
+  // Stop repeating command
+  if (manualTimer !== null) {
+    clearInterval(manualTimer);
+    manualTimer = null;
+  }
+
+  // Tell ESP32 to stop this command
+  if (currentManualCommand !== null) {
+    send(currentManualCommand, 0);
+    currentManualCommand = null;
+  }
+}
+
 function turnRobot(){
   let right=parseFloat(document.getElementById('turnRight').value)||0;
   let left=parseFloat(document.getElementById('turnLeft').value)||0;
@@ -84,13 +120,46 @@ function moveXY(){
 
 function stopRobot(){fetch('/stop')}
 
-['F','B','L','R'].forEach(id=>{
-  const el=document.getElementById(id);
-  el.addEventListener('mousedown',()=>send(id,1));
-  el.addEventListener('mouseup',()=>send(id,0));
-  el.addEventListener('mouseleave',()=>send(id,0));
-  el.addEventListener('touchstart',e=>{e.preventDefault();send(id,1)});
-  el.addEventListener('touchend',e=>{e.preventDefault();send(id,0)});
+['F','B','L','R'].forEach(id => {
+
+  const el = document.getElementById(id);
+
+  // Mouse press
+  el.addEventListener('mousedown', e => {
+      e.preventDefault();
+      startManual(id);
+    }
+  );
+
+  // Mouse release
+  el.addEventListener('mouseup',e => {
+      e.preventDefault();
+      stopManual();
+    });
+
+  // Mouse leaves button
+  el.addEventListener('mouseleave',e => {
+      e.preventDefault();
+      stopManual();
+    });
+
+  // Touch press
+  el.addEventListener('touchstart',e => {
+      e.preventDefault();
+      startManual(id);
+    });
+
+  // Touch release
+  el.addEventListener('touchend',e => {
+      e.preventDefault();
+      stopManual();
+    });
+
+  // Touch cancelled
+  el.addEventListener('touchcancel',e => {
+      e.preventDefault();
+      stopManual();
+    });
 });
 
 setInterval(()=>{

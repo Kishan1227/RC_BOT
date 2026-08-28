@@ -72,7 +72,7 @@ void updateManualMotors() {
   int speedR = 0;
 
   if (moving) {
-    int dir = fwd ? 1 : -1;
+    int dir = fwd ? 1 : -1;                           // FWD/BACK + L/R code present hire
 
     speedL = BASE_SPEED * dir;
     speedR = BASE_SPEED * dir;
@@ -82,7 +82,7 @@ void updateManualMotors() {
       speedL += off * dir;
       speedR -= off * dir;
     }
-  } else if (turning) {
+  } else if (turning) {                               
     int dir = left ? -1 : 1;
     speedL = -PIVOT_SPEED * dir;
     speedR = PIVOT_SPEED * dir;

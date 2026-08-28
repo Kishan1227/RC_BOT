@@ -17,13 +17,13 @@ extern const char* password;
 #define PWM_FREQ 5000
 #define PWM_RES 8
 
-#define WHEEL_CIRCUMFERENCE_MM 100.53f
-#define WHEEL_BASE_MM 130.50f
-#define LEFT_TICKS_PER_REV 2020.0f
+#define WHEEL_CIRCUMFERENCE_MM 100.53f   // circumference of the actual wheel
+#define WHEEL_BASE_MM 130.50f            // changed according to requirment
+#define LEFT_TICKS_PER_REV 2020.0f        //manually check for individual motors
 #define RIGHT_TICKS_PER_REV 2000.0f
 
 #define BASE_SPEED 200
-#define TURN_OFFSET 70
+#define TURN_OFFSET 50
 #define PIVOT_SPEED 190
 
 #define CONTROL_INTERVAL_MS 50

@@ -13,7 +13,7 @@ const char* ssid = "ROBOT_ESP32";
 const char* password = "roboy1234";
 
 float Kp = 150.0f;
-float Ki = 25.0f;
+float Ki = 30.0f;                        // 25 // set this manually
 float Kd = 0.0f;
 float RIGHT_MOTOR_SCALE = 0.90f;
 
